@@ -1,0 +1,34 @@
+<!--Богданова Анастасия Александровна М8О-106М-22-->
+<!--В окне 3 элемента: 2 элемента для ввода текста и кнопка. Вводится 2 числа. По нажатию кнопки максимальное число-->
+<!--заменяется на разность максимального и минимального.-->
+<!--cпециальный метод addEventListener-->
+<head>
+    <script>
+        function min_max() {
+            x = +frm1.result1.value
+            y = +frm1.result2.value
+
+            if (x>=y) {
+                frm1.result1.value = x-y
+            } else {
+                frm1.result2.value = y-x
+            }
+            
+        }
+    </script>
+</head>
+
+<body>
+    <br> Богданова Анастасия Александровна М8О-106М-22
+    <br> В окне 3 элемента: 2 элемента для ввода текста и кнопка. Вводится 2 числа. По нажатию кнопки максимальное число заменяется на разность максимального и минимального.
+    <form name='frm1'>
+        <br> Первое число: <input name='result1' type='number'>
+        <br> Второе число: <input name='result2' type='number'>
+        <br>
+        <br> <input name='clickable' type='button' value='max-min'>
+    </form>
+    <script>
+        btn = document.getElementsByName('clickable')[0]
+        btn.addEventListener('click', min_max)     
+    </script>
+</body>
