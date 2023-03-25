@@ -1,43 +1,122 @@
+<!--Богданова Анастасия Александровна М8О-106М-22
+    Реализовать простой справочник на LocalStorage-->
+
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <style> body{margin:50px}</style>
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <style> 
+      body {
+         margin:25px
+      }
+      table {
+         width: 70%; /* Ширина таблицы */
+         border-collapse: collapse; /* Убираем двойные линии между ячейками */
+         margin: auto;
+      }
+      td, th {
+         padding: 4px; /* Поля в ячейках */
+         border: 1px solid #999; /* Граница между ячейками */
+         text-align: left;
+      }
+      thead {
+         background: #666; /* Цвет фона строки заголовка */
+         color: #fff; /* Цвет текста */
+      }
+   </style>
 </head>
-<body>
-  <br> Богданова Анастасия Александровна М8О-106М-22
-  <br> Реализовать простой справочник на LocalStorage
-  <br><br>
-   <form>
-  	<input type='button' value='Очистить' onclick='fclear()'>
-  	<br><br>
-        	  <input id="item" placeholder="Введите значение" >
-  	<input type='button' value='Добавить' onclick='fadd()'>
+<body> Богданова Анастасия Александровна М8О-106М-22
+   <br> Реализовать простой справочник на LocalStorage
+   <br><br>
+   <form align="center" id='dataForm' onsubmit="saveFormFunction(event)">
+      <label for="date">Дата:</label>
+      <input type="date" id="date" name="date" value='2023-07-06'>
+      <br>
+      <br>
+      <label for="firstName">Имя:</label>
+      <input type="text" id="firstName" name="firstName" value='Anastasia'>
+      <br>
+      <br>
+      <label for="lastName">Фамилия:</label>
+      <input type="text" id="lastName" name="lastName" value='Bogdanova'>
+      <br>
+      <br>
+      <label for="phone">Телефон:</label>
+      <input  type="tel" id="phone" name="phone" value='12345678'>
+      <br>
+      <br>
+      <button type="submit">Сохранить</button>
    </form>
-   <h2>Записи</h2>
-   <ul  id='List'></ul>
-<script>
-function fadd() { // добавить
-        	itemsArray.push(input.value);
-        	localStorage.setItem('items', JSON.stringify(itemsArray));
-        	const li = document.createElement('li');
-        	li.textContent = input.value;
-        	ul.appendChild(li);
-        	input.value = "";
-}
-function fclear() { // очистить
-  localStorage.clear();
-  while (ul.firstChild) ul.removeChild(ul.firstChild)
-  itemsArray = [];
-}
- 
-const form   = document.querySelector('form');
-const ul 	= document.getElementById('List')
-const input  = document.getElementById('item');
-let itemsArray = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
- 
-for (i=0; i<itemsArray.length; i++){
-  const li = document.createElement('li');
-  li.textContent = itemsArray[i];
-  ul.appendChild(li);
-}
+   <br>
+   <br>
+   <h2 align="center">Записи</h2>
+   <table>
+      <thead>
+         <tr>
+            <td>ID</td>
+            <td>Дата</td>
+            <td>Имя</td>
+            <td>Фамилия</td>
+            <td>Телефон</td>
+            <td>Действия</td>
+         </tr>
+      </thead>
+      <tbody id="infoTable">
+      </tbody>
+  </table>
+</body>
+
+<script> 
+  
+   if (!localStorage.userData) {
+      localStorage.userData = JSON.stringify([])
+   };
+
+   tableRendering();
+
+   function saveFormFunction(event) {
+      // Получает значения формы
+
+      event.preventDefault();
+      const date = document.getElementById('date').value;
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const phone = document.getElementById('phone').value;
+
+      const data = {
+         date,
+         firstName,
+         lastName,
+         phone
+      }; 
+
+      let dataInLocalStorage = JSON.parse(localStorage.userData);
+      dataInLocalStorage.unshift(data);
+      localStorage.userData = JSON.stringify(dataInLocalStorage);
+
+      // Очищаем поля
+      document.getElementById('dataForm').reset();
+      tableRendering();
+   }
+
+   function tableRendering() {
+
+      // Выводим данные в таблицу
+      let table = document.getElementById('infoTable');
+      table.innerHTML = "";
+      data = JSON.parse(localStorage.userData);
+
+      for (let i = 0; i < data.length; ++i) {
+         const record = data[i];
+         const row = document.createElement('tr');
+         row.innerHTML = `<td>${i}</td><td>${record.date}</td><td>${record.firstName}</td><td>${record.lastName}</td><td>${record.phone}</td><td><button onclick="toDelete(${i})">x</td>`;
+         table.appendChild(row);
+      }
+   }
+
+   function toDelete(indexToDelete) {
+
+      data = JSON.parse(localStorage.userData);
+      data.splice(indexToDelete, 1);
+      localStorage.userData = JSON.stringify(data);
+      tableRendering();
+   }
 </script>
-</body></html>
