@@ -1,0 +1,168 @@
+<!--Богданова Анастасия Александровна М8О-106М-22
+    Разработать 2-3 примера с использованием JQuery, который включал бы функции из разделов
+    1: addClass()
+    2: position(), offset()
+    3: :password
+    4: innerWidth()
+    5: wrap(), wrapAll()
+    6: parent()
+    7: undelegate()
+    8: mouseover()
+    9: keydown()
+    10: slideToggle()-->
+
+<!DOCTYPE html>
+<head>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    Богданова Анастасия Александровна М8О-106М-22
+   <br> Разработать 2-3 примера с использованием JQuery, который включал бы функции из разделов
+   <br>1: addClass()
+    2: position(), offset()
+    3: :password
+    4: innerWidth()
+    5: wrap(), wrapAll()
+    6: parent()
+    7: undelegate()
+    8: mouseover()
+    9: keydown()
+    10: slideToggle()
+    <br><br>
+</head>
+
+<body> 
+   <button id="enableAllButtons">Разрешить просмотр</button> <button  id="disableAllButtons">Запретить просмотр</button>
+   <br><br>
+
+   <script>
+        $(document).ready(function(){
+
+            $("body").keydown(function(event) {
+                if (event.which == 27) {
+                    toDelete(0);
+                }
+            });
+
+            $(".passwordItem").toggle();
+
+            $("input:password").parent().wrapAll('<div class="violetBorder"></div>');
+
+            $("input:password").focus(function() {
+                $(this).addClass("third");
+            }).blur(function() {
+                $(this).removeClass("third");    
+            });
+
+            $("button").mouseover(function() {
+                $(this).addClass("second");
+            }).mouseout(function() {
+                $(this).removeClass("second");
+            });
+
+            $( "#hideButton" ).click(function(){
+                $(".passwordItem").animate({width: 'toggle'})
+            });
+
+            $("#enableAllButtons").click(function() {
+                $("#hideButton").on('click', function(){
+                $(".passwordItem").animate({width: 'toggle'})
+            });
+            });
+
+            $("#disableAllButtons").click(function() {
+                $("#hideButton").off('click');
+            });
+        });
+    </script>
+
+    <style>
+        .violetBorder{
+            border: solid;
+            padding: 10px;
+            width:fit-content;
+        }
+        .second{
+            background-color:slategrey;
+        }
+        .third{
+            background-color:Thistle;
+        }
+    </style>
+
+    <form id='dataForm' onsubmit="saveFormFunction(event)">
+      <input type="text" id="websiteInput"  placeholder="Website" required>
+      <input type="text" id="usernameInput" placeholder="Username" required>
+      <input type="password" id="passwordInput"  class="passwordInput" placeholder="Password" required>
+      <button type="submit" class="bodyButton" id="submitButton">Сохранить</button>
+    </form>
+    <br>
+    <button  id="hideButton" class="bodyButton">Открыть/скрыть пароли</button>
+    <br>
+    <h2>Записи</h2>
+    <ol id="list" class="list">
+    </ol>
+</body>
+
+<script> 
+  
+   if (!localStorage.userData) {
+      localStorage.userData = JSON.stringify([])
+   };
+
+   listRendering();
+
+   function saveFormFunction(event) {
+      // Получает значения формы
+
+      event.preventDefault();
+      const websiteInput = document.getElementById('websiteInput').value;
+      const usernameInput = document.getElementById('usernameInput').value;
+      const passwordInput = document.getElementById('passwordInput').value;
+
+      const data = {
+         websiteInput,
+         usernameInput,
+         passwordInput
+      }; 
+
+      let dataInLocalStorage = JSON.parse(localStorage.userData);
+      dataInLocalStorage.unshift(data);
+      localStorage.userData = JSON.stringify(dataInLocalStorage);
+
+      // Очищаем поля
+      document.getElementById('dataForm').reset();
+      listRendering();
+   }
+
+   function listRendering() {
+
+      // Выводим данные в таблицу
+      let list = document.getElementById('list');
+      list.innerHTML = "";
+      data = JSON.parse(localStorage.userData);
+
+      for (let i = 0; i < data.length; ++i) {
+         const record = data[i];
+         const row = document.createElement('li');
+         row.innerHTML = `Сайт: ${record.websiteInput}| Логин: ${record.usernameInput}| Пароль: <span class="passwordItem">${record.passwordInput}</span>| <button class="bodyButton" onclick="toDelete(${i})">x`;
+         list.appendChild(row);
+      }
+   }
+
+   function toDelete(indexToDelete) {
+
+      data = JSON.parse(localStorage.userData);
+      data.splice(indexToDelete, 1);
+      localStorage.userData = JSON.stringify(data);
+      listRendering();
+   }
+
+</script>
+
+<style type="text/css">
+
+    html {
+      font-family: Verdana, Arial, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+
+</style>
