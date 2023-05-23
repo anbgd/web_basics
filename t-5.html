@@ -1,0 +1,91 @@
+<!--Богданова Анастасия Александровна М8О-106М-22
+В HTML-документе определены 2 формы. 
+На первой управляющие кнопки и поля ввода, вторая  - пустая.
+При нажатии на кнопки первой формы на второй форме генерируются элементы (а).
+Параметры и количество элементов определяются в элементах 1-й формы(б),
+а также заданы в виде массивов на JavaScript.
+После построения элементов на второй форме по некоторым кнопкам/элементам
+можно произвести некоторые действия (в), результаты которых отображаются на 2-форме.
+Для генерации элементов и вывода результатов использовать свойство innerHTML.
+
+1. (а) SELECT, INPUT ( type=button)
+(б)В элементе SELECT выбрать цвет.
+(в)По кнопке изменить цвет фона документа
+ Значения цветов в SELECT изначально заданы в массиве
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dynamic Form Elements</title>
+  <script>
+    // Массивы для определения параметров элементов
+    var colors = ["red", "green", "blue", "yellow"];
+    var actions = ["Change Background Color", "Change Text Color", "Change Border Color"];
+  
+    // Функция для генерации элементов на второй форме
+    function generateElements() {
+      var select = document.getElementById("colorSelect");
+      var selectedColor = select.options[select.selectedIndex].value;
+  
+      var output = document.getElementById("output");
+      output.innerHTML = "";
+  
+      for (var i = 0; i < actions.length; i++) {
+        var button = document.createElement("input");
+        button.type = "button";
+        button.value = actions[i];
+        button.style.backgroundColor = selectedColor;
+        button.onclick = performAction;
+  
+        output.appendChild(button);
+      }
+    }
+  
+    // Функция для выполнения действия при нажатии кнопки
+    function performAction() {
+      var action = this.value;
+      var body = document.getElementsByTagName("body")[0];
+  
+      switch (action) {
+        case "Change Background Color":
+          body.style.backgroundColor = this.style.backgroundColor;
+          break;
+        case "Change Text Color":
+          body.style.color = this.style.backgroundColor;
+          break;
+        case "Change Border Color":
+          body.style.border = "2px solid " + this.style.backgroundColor;
+          break;
+        default:
+          break;
+      }
+    }
+  </script>
+</head>
+<body>
+<br>Богданова Анастасия Александровна М8О-106М-22
+<br>В HTML-документе определены 2 формы. 
+<br>На первой управляющие кнопки и поля ввода, вторая  - пустая.
+<br>При нажатии на кнопки первой формы на второй форме генерируются элементы (а).
+<br>Параметры и количество элементов определяются в элементах 1-й формы(б), а также заданы в виде массивов на JavaScript.
+<br>После построения элементов на второй форме по некоторым кнопкам/элементам можно произвести некоторые действия (в), результаты которых отображаются на 2-форме.
+<br>Для генерации элементов и вывода результатов использовать свойство innerHTML.
+<br>
+<br>1. (а) SELECT, INPUT ( type=button)
+<br>(б)В элементе SELECT выбрать цвет.
+<br>(в)По кнопке изменить цвет фона документа
+<br>Значения цветов в SELECT изначально заданы в массиве
+<br>
+  <h1>First Form</h1>
+  <select id="colorSelect">
+    <option value="red">Red</option>
+    <option value="green">Green</option>
+    <option value="blue">Blue</option>
+    <option value="yellow">Yellow</option>
+  </select>
+  <input type="button" value="Generate Elements" onclick="generateElements()">
+  
+  <h1>Second Form</h1>
+  <div id="output"></div>
+</body>
+</html>
